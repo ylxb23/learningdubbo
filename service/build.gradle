@@ -1,0 +1,16 @@
+ /*============================================================================
+ * Build file for subproject 'service'
+ *
+ * Root build file: "${rootProject.projectDir}/build.gradle"
+ * ============================================================================
+ */
+dependencies {
+
+	compile library.commons_lang
+	compile library.commons_io
+	
+	compile library.dubbo
+    compile library.springBootWeb
+    testCompile library.springBootTest
+
+}

@@ -1,0 +1,7 @@
+include 'configcenter'
+include 'consumera'
+include 'consumerb'
+include 'monitoringplatform'
+include 'service'
+include 'servicesupport'
+		

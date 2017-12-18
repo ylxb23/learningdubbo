@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd 
+       http://code.alibabatech.com/schema/dubbo 
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+    <dubbo:application name="servicesupport" />
+    
+    <!-- registry: 注册中心 -->
+    <!-- multicase: 去中心化,不需要安装注册中心.依赖网络的拓扑和路由,跨机房有风险 -->
+    <!-- reids: 支持基于客户端双写的集群方式,性能高.要求服务器时间同步,用于检查心跳过期脏数组 -->
+    <!-- simple: Dogfooding,注册中心本身也是一个标准的RPC服务.没有集群支持,可能单点故障 -->
+    <!-- zookeeper: 支持基于网络的集群方式,有广泛周边开源产品,建议在dubbo 2.3.3以上版本使用.依赖zookeeper的稳定性 -->
+    <dubbo:registry address="multicast://224.1.2.3:1234"/>
+    
+    <!-- 协议配置(作为服务提供方,配置支持的协议) -->
+    <!-- dubbo: 采用NIO复用单一长连接，并使用线程池并发处理请求，减少握手和加大并发效率，性能较好(推荐使用).在大文件传送时,单一连接会成为瓶颈 -->
+    <dubbo:protocol id="protocolDubbo" name="dubbo" port="20880"/>
+    <!-- rmi: 可与源生RMI互操作,基于TCP协议 -->
+    <!-- hessian: 可与源生Hessian互操作,基于HTTP协议.需hessian.jar支持,http短连接开销大 -->
+
+    <!-- transporter:  -->
+    <!-- netty: jboss的NIO框架,性能较好(推荐使用).一次请求派发两种事件,需屏蔽无效事件 -->
+    <!-- mina: 老牌NIO框架,稳定.待发送消息队列派发不及时,大压力下会出现FullGC -->
+    <!-- grizzly: SUN的NIO框架,应用于GlassFish服务中心.线程池不可扩展,Filter不能拦截下一Filter -->
+
+    <!-- Serialization: -->
+    <!-- hessian: 性能较好,多语言支持(推荐).hessian各版本兼容性不好,可能与项目其他的hessian版本冲突(dubbo内嵌hessian3.2.1的源码) -->
+    <!-- dubbo: 通过不传输pojo的类元信息,在大量传输pojo时性能较好.当参数增加外部字段时,需外部文件声明 -->
+    <!-- json: 纯文本,可跨语言解析,缺省采用fastjson解析.性能较差 -->
+    <!-- java: jdk原生支持.性能较差 -->
+    
+    <!-- ProxyFactory: -->
+    <!-- javassist: 通过字节码生成代替反射,性能比较好(推荐使用).依赖于javassist.jar包,占用JVM的Perm内存,Perm内存设大些(-XX:PermSize=128m) -->
+    <!-- jdk: jdk原生支持.性能较差 -->
+    
+    <!-- Cluster: -->
+    <!-- Failover: 失败自动切换,当出现失败,重试其他服务器,通常用于读操作(推荐使用).重试会带来更长的延时 -->
+    <!-- Failfast: 快速失败,只发起一次调用,失败立即报错,通常用于非幂等性的写操作.如果有机器正在重启可能会调用失败 -->
+    <!-- Failsafe: 失败安全,出现异常时,直接忽略,通常用于写入审计日志等操作.调用信息丢失 -->
+    <!-- Failback: 失败自动恢复,后台记录失败请求,定时重发,通常用户消息通知操作. -->
+    <!-- Forking: 并行调用多个服务器,只要一个成功即返回,通常用于实时性要求高的读操作.浪费更多的服务器资源 -->
+    <!-- Broadcast: 广播调用所有提供者,逐个调用,任意一台报错则报错,通常用于更新提供方本地状态.速度慢,任意一台报错则报错 -->
+    
+    <!-- LoadBalance: -->
+    <!-- Random: 随机,按权重设置随机概率(推荐使用).在一个截面上碰撞的概率高重试时可能出现瞬间压力不均 -->
+    <!-- RoundRobin: 轮询,按公约后的权重设置轮询比率.存在慢的机器累积请求问题,极端情况下可能雪崩  -->
+    <!-- LeastActive: 最少活跃调用数,相同活跃数的随机,活跃数指调用前后计数差,使慢的机器收到更少的请求.不支持权重,在容量规划时不能通过权重把压力导向一台机器压测容量 -->
+    <!-- ConsistentHash: 一致性Hash,相同参数的请求总是发送到同一提供者,当一台机器挂时原本发往该机器的请求,基于虚拟节点平摊到其他提供者,不会引起剧烈变动.压力分摊不均 -->
+    
+    <!-- 路由规则: -->
+    <!-- 条件路由: 基于条件达表示的路由规则,功能简单易用.有些复杂多分支条件情况规则很难描述 -->
+    <!-- 脚本路由: 基于脚本引擎的路由规则,功能强大.没有运行沙箱脚本能力过于强大,可能成为后门 -->
+    
+    <!-- Container: 启动容器 -->
+    <!-- Spring: 自动加载META-INF/spring目录下的所有spring配置 -->
+    <!-- Jetty: 启动一个内嵌的jetty容器,用于汇报状态.大量访问页面时,会影响服务器的线程和内存 -->
+    <!-- Log4j: 自动配置log4j的配置,在多进程启动时,自动给日志文件按进程分目录.用户不能控制log4j的配置,不够灵活 -->
+
+    <bean id="demoService" class="com.zero.ld.service.support.provider.DemoServiceImpl"/>
+    <dubbo:service interface="com.zero.ld.service.service.DemoService" ref="demoService"/>
+    
+    <!-- dubbo:service 服务配置:用于暴露一个服务，定义服务的元信息，一个服务可以用多个协议暴露,一个服务也可以注册多个注册中心 -->
+    <!-- dubbo:reference 引用配置:用于创建一个远程服务代理，一个引用可以指向多个注册中心 -->
+    <!-- dubbo:protocol 协议配置:用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受 -->
+    <!-- dubbo:application 应用配置:用于配置当前应用信息，不管该应用是提供者还是消费者 -->
+    <!-- dubbo:module 模块配置:用于配置当前模块信息，可选 -->
+    <!-- dubbo:registry 注册中心配置:用于配置连接注册中心相关信息 -->
+    <!-- dubbo:monitor 监控中心配置:用于配置连接监控中心相关信息，可选 -->
+    <!-- dubbo:provider 服务方配置:当 ProtocolConfig 和 ServiceConfig 某属性没有配置，采用此缺省值，可选 -->
+    <!-- dubbo:consumer 消费方配置:当 ReferenceConfig 某属性没有配置时，采用此缺省值，可选 -->
+    <!-- dubbo:method 方法配置:用于 ServiceConfig 和 ReferenceConfig 指定方法级的配置信息  -->
+    <!-- dubbo:argument 参数配置:用于指定方法参数配置 -->
+    
+    <!-- 
+	    方法级优先，接口级次之，全局配置再次之。
+	    如果级别一样，则消费方优先，提供方次之。
+     -->
+    
+    
+</beans>

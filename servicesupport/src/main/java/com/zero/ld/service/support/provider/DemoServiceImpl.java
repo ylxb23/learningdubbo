@@ -9,7 +9,7 @@ import com.zero.ld.service.service.DemoService;
  * @date 2017年12月18日 下午10:24:26
  * @author zero
  */
-@Service
+@Service(version="1.0.0")
 public class DemoServiceImpl implements DemoService {
 
 	@Override

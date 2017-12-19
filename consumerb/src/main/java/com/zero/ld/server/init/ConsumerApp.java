@@ -4,42 +4,26 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
-import com.zero.ld.service.request.Person;
-import com.zero.ld.service.service.DemoService;
+import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 
 /**
  * dubbo服务消费方App入口
  * @date 2017年12月18日 下午2:56:13
  * @author zero
  */
-@Configuration
-@DubboComponentScan
+@SpringBootApplication(scanBasePackages= {"com.zero.ld.server"})
+@EnableDubbo(scanBasePackages= {"com.zero.ld.server"})
 public class ConsumerApp {
 	private static final Logger logger = LoggerFactory.getLogger(ConsumerApp.class);
 	
 	public static void main(String[] args) throws IOException {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] {"dubbo-consumer.xml"});
-		context.start();
-		logger.info("beans: {}", context.getBeanDefinitionNames());
-		// for test
-		testDemoService(context);
-		System.in.read();
+		SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(ConsumerApp.class);
+		ConfigurableApplicationContext context =  springBuilder.web(true).run(args);
+		logger.info(context.getApplicationName());
 	}
-	
-	private static void testDemoService(ApplicationContext context) {
-		DemoService demoServiceS = (DemoService) context.getBean("demoService");
-		Person person = new Person();
-		person.setName("zero");
-		person.setAge(23);
-		person.setGendar("male");
-		logger.info("demoService invoke sayHello: {}", demoServiceS.sayHello(person));
-	}
-
 	
 }

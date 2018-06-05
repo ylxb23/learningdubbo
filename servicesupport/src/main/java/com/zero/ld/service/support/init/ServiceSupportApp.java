@@ -24,7 +24,7 @@ public class ServiceSupportApp {
 	public static void main(String[] args) throws IOException {
 		SpringApplicationBuilder builder = new SpringApplicationBuilder(ServiceSupportApp.class);
 		final ConfigurableApplicationContext context = builder.web(false).run(args);
-		logger.info("Application started with {} beans inited", context.getBeanDefinitionCount());
+		logger.info("Application started with {} beans inited, on port[{}]", context.getBeanDefinitionCount());
 		try {
 			Runtime.getRuntime().addShutdownHook(new Thread("shutdown hook thread") {
 				@Override

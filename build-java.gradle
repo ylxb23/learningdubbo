@@ -36,16 +36,18 @@ subprojects {
     /**
 	 * Task to create javadoc jars
 	 */
-	task javadocJar(type: Jar, dependsOn:javadoc) {
+/**	
+    task  javadocJar(type: Jar, dependsOn:javadoc) {
 		classifier = 'javadoc'
 		from javadoc.destinationDir
 	}
+*/
 
 	/**
 	 * Define artifacts
 	 */
 	artifacts {
 		archives sourcesJar
-		archives javadocJar
+//		archives javadocJar
 	}
 }

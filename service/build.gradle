@@ -9,8 +9,10 @@ dependencies {
 	compile library.commons_lang
 	compile library.commons_io
 	
-	compile library.dubbo
+	/*
+    compile library.dubboSpringBoot
     compile library.springBootWeb
+    
     testCompile library.springBootTest
-
+    */
 }

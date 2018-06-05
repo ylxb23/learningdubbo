@@ -1,6 +1,7 @@
+rootProject.name="learningdubbo"
+
 include 'configcenter'
-include 'consumera'
-include 'consumerb'
+include 'consumer'
 include 'monitoringplatform'
 include 'service'
 include 'servicesupport'

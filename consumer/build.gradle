@@ -1,5 +1,5 @@
  /*============================================================================
- * Build file for subproject 'servicesupport'
+ * Build file for subproject 'consumer'
  *
  * Root build file: "${rootProject.projectDir}/build.gradle"
  * ============================================================================
@@ -9,23 +9,20 @@ dependencies {
 
 	compile library.commons_lang
 	compile library.commons_io
-	/**
-	compile(library.zookeeper) {
-	   exclude module: "log4j"
-       exclude module: "slf4j-api"
-       exclude module: "slf4j-log4j12"
-	}
-	*/
-	compile(library.zkclient) {
-	   // 去除重复的 log4j依赖
+	
+//	compile library.slf4j_api
+//	compile library.slf4j_jdk
+    
+    compile(library.zkclient) {
+       // 去除重复的 log4j依赖
        exclude module: "log4j"
        exclude module: "slf4j-api"
        exclude module: "slf4j-log4j12"
-	}
-	
+    }
+    
+
     compile library.dubboSpringBoot
     compile library.springBootWeb
     
     testCompile library.springBootTest
-
 }

@@ -9,8 +9,8 @@
  
  */
 ext {
-    sprintBootVersion                   = '1.5.3.RELEASE'
-    dubboVersion                        = '2.5.8'
+    sprintBootVersion                   = '1.5.10.RELEASE'
+    dubboSpringBootVersion              = '2.0.0'
 
 
 	library = [
@@ -26,11 +26,14 @@ ext {
 		commons_lang: 					"org.apache.commons:commons-lang3:3.5",	
 		commons_io:						"commons-io:commons-io:2.5",
 		
-		dubbo:                          "com.alibaba:dubbo:${dubboVersion}",
+		dubboSpringBoot:                "com.alibaba.spring.boot:dubbo-spring-boot-starter:${dubboSpringBootVersion}",
 		
+		springBoot:                     "org.springframework.boot:spring-boot-starter:${sprintBootVersion}",
 		springBootWeb:                  "org.springframework.boot:spring-boot-starter-web:${sprintBootVersion}",
 		springBootAop:                  "org.springframework.boot:spring-boot-starter-aop:${sprintBootVersion}",
 		springBootTest:                 "org.springframework.boot:spring-boot-starter-test:${sprintBootVersion}",
+		zookeeper:                      "org.apache.zookeeper:zookeeper:3.5.4-beta",
+		zkclient:                       "com.github.sgroschupf:zkclient:0.1",
 	]
 	
 }
